@@ -1,0 +1,31 @@
+{
+  "name": "efvv-prostir",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ЄФВВ Простір — статичний сайт з PDF-конспектами для підготовки до ЄФВВ",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "preview": "node scripts/serve-out.mjs",
+    "lint": "eslint .",
+    "verify": "node scripts/verify-out.mjs",
+    "check": "npm run build && npm run lint && npm run verify"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.6",
+    "typescript": "5.9.3"
+  }
+}

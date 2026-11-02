@@ -1,0 +1,25 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# env files
+.env*
+
+# платні файли не повинні потрапляти в репозиторій
+*.pdf
+
+# локальна конфігурація запуску (шляхи до node на цьому ПК)
+/.claude/
+
+# робочі нотатки й промт для нових чатів (містять локальні шляхи)
+/CLAUDE.md
