@@ -1,5 +1,17 @@
 import Link from "next/link";
+import { formatPrice, kitMessage, subjects } from "@/data/subjects";
+import { telegramLink } from "@/lib/urls";
+import HeaderBuy, { type HeaderBuyKits } from "./HeaderBuy";
 import MainNav from "./MainNav";
+
+const kits: HeaderBuyKits = Object.fromEntries(
+  subjects
+    .filter((subject) => subject.kit.ready)
+    .map((subject) => [
+      subject.id,
+      { href: telegramLink(kitMessage(subject)), label: subject.kit.price ? `Купити · ${formatPrice(subject.kit.price)}` : "Купити" },
+    ]),
+);
 
 export default function SiteHeader() {
   return (
@@ -10,6 +22,7 @@ export default function SiteHeader() {
           <span className="brand__name">ЄФВВ <b>Простір</b></span>
         </Link>
         <MainNav />
+        <HeaderBuy kits={kits} />
       </div>
     </header>
   );

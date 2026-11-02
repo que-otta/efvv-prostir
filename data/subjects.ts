@@ -424,5 +424,5 @@ export function kitMessage(subject: Subject): string {
 }
 
 export function formatPrice(price: number): string {
-  return `${price} ₴`;
+  return `${price} ₴`;
 }

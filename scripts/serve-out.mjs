@@ -2,7 +2,7 @@
 // Підтримує basePath: NEXT_PUBLIC_BASE_PATH=/repo npm run preview
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve } from "node:path";
+import { extname, join, normalize, resolve, sep } from "node:path";
 
 const root = resolve(process.argv[2] ?? "out");
 const port = Number(process.env.PORT ?? process.argv[3] ?? 4173);
@@ -24,9 +24,15 @@ const types = {
 };
 
 function resolveFile(urlPath) {
-  const clean = normalize(decodeURIComponent(urlPath)).replace(/^([/\\])+/, "");
+  let decoded;
+  try {
+    decoded = decodeURIComponent(urlPath);
+  } catch {
+    return null; // некоректний %-код в адресі
+  }
+  const clean = normalize(decoded).replace(/^([/\\])+/, "");
   const candidate = join(root, clean);
-  if (!candidate.startsWith(root)) return null;
+  if (candidate !== root && !candidate.startsWith(root + sep)) return null;
   if (existsSync(candidate) && statSync(candidate).isFile()) return candidate;
   const index = join(candidate, "index.html");
   if (existsSync(index)) return index;
@@ -57,4 +63,4 @@ createServer((request, response) => {
   response.writeHead(404, { "content-type": types[".html"] });
   if (existsSync(notFound)) createReadStream(notFound).pipe(response);
   else response.end("Not found");
-}).listen(port, () => console.log(`out/ → http://localhost:${port}${basePath}/`));
+}).listen(port, "127.0.0.1", () => console.log(`out/ → http://localhost:${port}${basePath}/`));

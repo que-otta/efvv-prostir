@@ -1,11 +1,11 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { formatPrice, kitStats, type Subject } from "@/data/subjects";
+import { formatPrice, kitMessage, kitStats, type Subject } from "@/data/subjects";
 import { samples } from "@/data/samples";
 import { plural } from "@/lib/plural";
-import { ArrowRight } from "./Icons";
+import { telegramLink } from "@/lib/urls";
+import { ArrowRight, Telegram } from "./Icons";
 import Pic from "./Pic";
-import ScoreNote from "./ScoreNote";
 import StatusBadge from "./StatusBadge";
 
 export function coverFor(subject: Subject) {
@@ -16,8 +16,8 @@ export default function KitCard({ subject }: { subject: Subject }) {
   const { ready, price } = subject.kit;
   const stats = kitStats(subject);
   const href = `/komplekty/${subject.id}/`;
-  const facts = ready
-    ? [`${stats.files} PDF`, stats.pages !== null ? `${stats.pages} ${plural(stats.pages, "сторінка", "сторінки", "сторінок")}` : null, price ? formatPrice(price) : null].filter(Boolean).join(" · ")
+  const size = ready
+    ? [`${stats.files} PDF`, stats.pages !== null ? `${stats.pages} ${plural(stats.pages, "сторінка", "сторінки", "сторінок")}` : null].filter(Boolean).join(" · ")
     : "Склад і ціну буде вказано, коли комплект буде готовий.";
 
   return (
@@ -27,24 +27,31 @@ export default function KitCard({ subject }: { subject: Subject }) {
       </div>
       <div className="kit-card__body">
         <Pic src={subject.icon} alt="" width={144} height={144} className="kit-card__avatar" loading="lazy" />
-        <StatusBadge ready={ready} />
+        {!ready && <StatusBadge ready={ready} />}
         <h3 className="kit-card__title">
           <Link href={href}>{subject.title}</Link>
         </h3>
         <p>{subject.description}</p>
-        <p className="kit-card__facts">{facts}</p>
+        <p className="kit-card__facts">
+          {ready && price ? <strong className="kit-card__price">{formatPrice(price)}</strong> : null}
+          <span>{size}</span>
+        </p>
         {ready && (
-          <>
-            <p className="kit-card__edition">
-              <span className="pill">{subject.edition.label}</span>
-              {subject.edition.freeUpdate && <span className="kit-card__free">оновлення безкоштовно</span>}
-            </p>
-            <ScoreNote compact />
-          </>
+          <p className="kit-card__edition">
+            <span className="pill">{subject.edition.label}</span>
+            {subject.edition.freeUpdate && <span className="kit-card__free">оновлення безкоштовно</span>}
+          </p>
         )}
-        <Link className="kit-card__link" href={href}>
-          Про комплект <ArrowRight />
-        </Link>
+        <div className="kit-card__actions">
+          {ready && (
+            <a className="btn btn--primary btn--sm" href={telegramLink(kitMessage(subject))} target="_blank" rel="noopener noreferrer">
+              <Telegram /> Купити
+            </a>
+          )}
+          <Link className="kit-card__link" href={href}>
+            Про комплект <ArrowRight />
+          </Link>
+        </div>
       </div>
     </article>
   );

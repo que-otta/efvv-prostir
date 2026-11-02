@@ -23,9 +23,12 @@ export default function BuyList() {
               <div className="buy-row__info">
                 <strong>{subject.title}</strong>
                 <span>{facts}</span>
-                <span className="buy-row__message">
-                  Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
-                </span>
+                <details className="buy-row__message">
+                  <summary>Не відкривається Telegram?</summary>
+                  <p>
+                    Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
+                  </p>
+                </details>
               </div>
               <a className="btn btn--primary" href={telegramLink(message)} target="_blank" rel="noopener noreferrer">
                 <Telegram />

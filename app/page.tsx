@@ -4,7 +4,8 @@ import { ArrowDown, ArrowRight } from "@/components/Icons";
 import KitCard from "@/components/KitCard";
 import Pic from "@/components/Pic";
 import SubjectChips from "@/components/SubjectChips";
-import { kitStats, subjects } from "@/data/subjects";
+import ScoreNote from "@/components/ScoreNote";
+import { formatPrice, kitStats, subjects } from "@/data/subjects";
 import { samplePath, samples } from "@/data/samples";
 import Faq from "@/components/Faq";
 import { faq } from "@/data/faq";
@@ -24,6 +25,8 @@ export default function HomePage() {
   const featuredStats = kitStats(featured);
   const featuredSample = samples.find((sample) => sample.subjectId === featured.id);
   const readyKits = subjects.filter((subject) => subject.kit.ready);
+  const prices = [...new Set(readyKits.map((subject) => subject.kit.price).filter((price): price is number => typeof price === "number"))];
+  const priceText = prices.length === 1 ? `${formatPrice(prices[0])} за комплект` : prices.length > 1 ? `від ${formatPrice(Math.min(...prices))}` : null;
   const soonKits = subjects.filter((subject) => !subject.kit.ready);
   const names = (list: typeof subjects) => list.map((subject) => `«${subject.title}»`).join(", ");
   const kitsIntro = soonKits.length === 0
@@ -46,6 +49,11 @@ export default function HomePage() {
               Візуальні PDF-конспекти, у яких кожен файл відповідає підрозділу (або кільком спорідненим підрозділам) програми
               предметного тесту. Обираєш предмет, дивишся приклад сторінок і купуєш комплект у Telegram.
             </p>
+            <ul className="hero__facts" aria-label="Коротко про комплекти">
+              <li>{subjects.length} {plural(subjects.length, "комплект", "комплекти", "комплектів")}</li>
+              <li>PDF-файли в Telegram</li>
+              {priceText && <li className="hero__price">{priceText}</li>}
+            </ul>
             <div className="actions">
               <Link className="btn btn--primary" href="/#komplekty">
                 Обрати комплект <ArrowDown />
@@ -75,6 +83,19 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="section dark" id="komplekty" aria-labelledby="kits-title">
+        <div className="container">
+          <h2 id="kits-title">Комплекти за предметами</h2>
+          <p className="prose">{kitsIntro}</p>
+          {readyKits.length > 0 && <ScoreNote />}
+          <div className="grid grid--kits">
+            {subjects.map((subject) => (
+              <KitCard key={subject.id} subject={subject} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section" aria-labelledby="what-title">
         <div className="container">
           <h2 id="what-title">Що це і для кого</h2>
@@ -91,18 +112,6 @@ export default function HomePage() {
               <h3>Що отримуєш</h3>
               <p>Набір PDF-файлів у Telegram. Файли залишаються в тебе назавжди, користуватися ними можна для власної підготовки.</p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section dark" id="komplekty" aria-labelledby="kits-title">
-        <div className="container">
-          <h2 id="kits-title">Комплекти за предметами</h2>
-          <p className="prose">{kitsIntro}</p>
-          <div className="grid grid--kits">
-            {subjects.map((subject) => (
-              <KitCard key={subject.id} subject={subject} />
-            ))}
           </div>
         </div>
       </section>

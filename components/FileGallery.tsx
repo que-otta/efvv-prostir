@@ -3,7 +3,7 @@ import { plural } from "@/lib/plural";
 import LevelPips from "./LevelPips";
 import WeightBar from "./WeightBar";
 
-/** Склад готового комплекту: файли за розділами програми (назва, сторінки, вага, рівні) — без вмісту самих файлів. */
+/** Склад готового комплекту: файли за розділами програми (номер, назва, сторінки, вага, рівні) — без вмісту самих файлів. */
 export default function FileGallery({ subject }: { subject: Subject }) {
   const totalPages = kitStats(subject).pages;
   return (
@@ -26,7 +26,7 @@ export default function FileGallery({ subject }: { subject: Subject }) {
               </p>
             </header>
             <WeightBar weight={group.weight} label="Вага розділу в програмі" />
-            <ul className="file-grid">
+            <ul className="file-list">
               {files.map((file) => {
                 const covers = fileCovers(file);
                 const weight = fileWeight(subject, file);
@@ -35,19 +35,21 @@ export default function FileGallery({ subject }: { subject: Subject }) {
                   weight ? `${covers.length > 1 ? "загальна вага" : "вага"} ${weight}` : null,
                 ].filter(Boolean).join(" · ");
                 return (
-                  <li className="file-card" key={file.code}>
-                    <div className="file-card__ph" aria-hidden="true">
-                      <span>{file.code}</span>
-                    </div>
-                    <div className="file-card__body">
-                      <span className="chip chip--code">Файл {file.code}</span>
-                      <h4 className="file-card__title">{file.title}</h4>
+                  <li className="file-row" key={file.code}>
+                    <span className="chip chip--code file-row__code">
+                      <span className="sr-only">Файл </span>
+                      {file.code}
+                    </span>
+                    <div className="file-row__main">
+                      <h4 className="file-row__title">{file.title}</h4>
                       {covers.length > 1 && (
-                        <p className="file-card__covers">
+                        <p className="file-row__covers">
                           {plural(covers.length, "Підрозділ", "Підрозділи", "Підрозділів")} {covers.join(" · ")}
                         </p>
                       )}
-                      {meta && <p className="file-card__meta">{meta}</p>}
+                    </div>
+                    <div className="file-row__meta">
+                      {meta && <span>{meta}</span>}
                       <LevelPips counts={fileLevelCounts(subject, file)} />
                     </div>
                   </li>

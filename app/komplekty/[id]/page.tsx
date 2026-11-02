@@ -6,17 +6,18 @@ import BuyBar from "@/components/BuyBar";
 import BuyBlock from "@/components/BuyBlock";
 import EditionNote from "@/components/EditionNote";
 import FileGallery from "@/components/FileGallery";
-import { ArrowRight, Check } from "@/components/Icons";
+import { Check } from "@/components/Icons";
 import KnowledgeList from "@/components/KnowledgeList";
 import { coverFor } from "@/components/KitCard";
 import LevelsOverview from "@/components/LevelsOverview";
 import Pic from "@/components/Pic";
 import ProgramDonut from "@/components/ProgramDonut";
+import SampleStrip from "@/components/SampleStrip";
 import StatusBadge from "@/components/StatusBadge";
 import Syllabus from "@/components/Syllabus";
 import ScoreNote from "@/components/ScoreNote";
-import { formatPrice, getSubject, kitIsOneToOne, kitStats, REFUND_NOTE, SCORE_NOTE, subjects } from "@/data/subjects";
-import { samplePath, samples } from "@/data/samples";
+import { formatPrice, getSubject, kitIsOneToOne, kitStats, levelsMeaning, REFUND_NOTE, SCORE_NOTE, subjects } from "@/data/subjects";
+import { samples } from "@/data/samples";
 import { terms, updateTerm } from "@/data/terms";
 import { buildMetadata, JsonLd, productJsonLd } from "@/lib/seo";
 import { plural } from "@/lib/plural";
@@ -86,16 +87,17 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
 
               {ready ? (
                 <dl className="facts">
-                  <div><dt>Файлів</dt><dd>{stats.files}</dd></div>
+                  <div><dt>Файлів PDF</dt><dd>{stats.files}</dd></div>
                   {stats.pages !== null && <div><dt>Сторінок</dt><dd>{stats.pages}</dd></div>}
-                  <div><dt>Формат</dt><dd>PDF</dd></div>
-                  {price && <div><dt>Ціна</dt><dd>{formatPrice(price)}</dd></div>}
+                  {price && <div className="facts__price"><dt>Ціна</dt><dd>{formatPrice(price)}</dd></div>}
                 </dl>
               ) : (
                 <p className="callout">
                   Комплект готується. Склад і ціну буде вказано тут, щойно він буде готовий.
                 </p>
               )}
+
+              <BuyBlock subject={subject} only="button" />
 
               {ready && (
                 <>
@@ -104,7 +106,7 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
                 </>
               )}
 
-              <BuyBlock subject={subject} />
+              <BuyBlock subject={subject} only="how" />
             </div>
             <div className="kit-hero__media">
               {cover ? (
@@ -134,6 +136,16 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
           </figure>
         </div>
       </section>
+
+      {sample && (
+        <section className="section section--tight" id="pryklad" aria-labelledby="sample-title">
+          <div className="container">
+            <h2 id="sample-title">Подивись, як виглядають сторінки</h2>
+            <p className="prose">Справжні сторінки з комплекту. Натисни на сторінку, щоб відкрити її в переглядачі й збільшити.</p>
+            <SampleStrip sample={sample} />
+          </div>
+        </section>
+      )}
 
       <section className="section" id="shcho-znaty" aria-labelledby="know-title">
         <div className="container">
@@ -165,26 +177,15 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
                 : `Комплект складається з ${stats.files} файлів-модулів: кожен охоплює кілька споріднених підрозділів програми, їхні номери вказано біля файлу. Біля кожного файлу — кількість сторінок, загальна вага підрозділів у програмі й рівні пунктів (A–D).`
               :"Комплект готується за розділами цієї програми. Смужка показує вагу розділу, мітки A–D — рівні пунктів програми, а де офіційний текст вказує вагу підрозділу, вона стоїть окремим значком."}
           </p>
+          {ready && (
+            <p className="note">
+              Мітки A–D біля файлів — рівні пунктів програми: {levelsMeaning.map((item) => `${item.level} — ${item.label.toLowerCase()}`).join(", ")}.
+              Докладніше — нижче в розділі <a href="#rivni">«Рівні складності»</a> і на сторінці <Link href="/programa/">«Програма»</Link>.
+            </p>
+          )}
           {ready ? <FileGallery subject={subject} /> : <Syllabus subject={subject} />}
         </div>
       </section>
-
-      {sample && (
-        <section className="section" aria-labelledby="sample-title">
-          <div className="container">
-            <h2 id="sample-title">Приклад матеріалу</h2>
-            <div className="sample-teaser">
-              <Pic src={sample.cover.src} alt="" width={sample.cover.width} height={sample.cover.height} sizes="10rem" loading="lazy" className="sample-teaser__img" />
-              <div>
-                <p className="prose">{sample.lead}</p>
-                <Link className="btn btn--ghost" href={samplePath(sample)}>
-                  Переглянути приклад <ArrowRight />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       <section className="section section--alt" id="rivni" aria-labelledby="levels-title">
         <div className="container">
@@ -210,6 +211,7 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
               ))}
             </ul>
             <p className="notice notice--warn">{REFUND_NOTE}</p>
+            <BuyBlock subject={subject} only="button" />
           </div>
         </section>
       )}

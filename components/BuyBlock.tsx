@@ -10,26 +10,36 @@ export function buyLabel(subject: Subject): string {
   return price ? `Купити в Telegram · ${formatPrice(price)}` : "Купити в Telegram";
 }
 
-export default function BuyBlock({ subject }: { subject: Subject }) {
+/** `only="button"` — лише кнопка; `only="how"` — кроки, застереження й текст повідомлення без кнопки; без `only` — усе разом. */
+export default function BuyBlock({ subject, only }: { subject: Subject; only?: "button" | "how" }) {
   const { ready } = subject.kit;
   const message = kitMessage(subject);
 
   return (
     <div className="buy">
-      <a className="btn btn--primary" href={telegramLink(message)} target="_blank" rel="noopener noreferrer">
-        <Telegram />
-        {buyLabel(subject)}
-      </a>
-      {ready ? (
-        <BuySteps />
-      ) : (
-        <p className="buy__note">
-          Напиши в Telegram — повідомимо, щойно комплект буде готовий. Платити зараз нічого не треба.
-        </p>
+      {only !== "how" && (
+        <a className="btn btn--primary" href={telegramLink(message)} target="_blank" rel="noopener noreferrer">
+          <Telegram />
+          {buyLabel(subject)}
+        </a>
       )}
-      <p className="buy__message">
-        Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
-      </p>
+      {only !== "button" && (
+        <>
+          {ready ? (
+            <BuySteps />
+          ) : (
+            <p className="buy__note">
+              Напиши в Telegram — повідомимо, щойно комплект буде готовий. Платити зараз нічого не треба.
+            </p>
+          )}
+          <details className="buy__message">
+            <summary>Не відкривається Telegram?</summary>
+            <p>
+              Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
+            </p>
+          </details>
+        </>
+      )}
     </div>
   );
 }

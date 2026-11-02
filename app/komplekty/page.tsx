@@ -1,5 +1,6 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import KitCard from "@/components/KitCard";
+import ScoreNote from "@/components/ScoreNote";
 import { subjects } from "@/data/subjects";
 import { buildMetadata } from "@/lib/seo";
 
@@ -27,6 +28,7 @@ export default function KitsPage() {
 
       <section className="section dark" aria-label="Список комплектів">
         <div className="container">
+          {subjects.some((subject) => subject.kit.ready) && <ScoreNote />}
           <div className="grid grid--kits">
             {subjects.map((subject) => (
               <KitCard key={subject.id} subject={subject} />

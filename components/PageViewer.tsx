@@ -68,6 +68,7 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
   const closeRef = useRef<HTMLButtonElement>(null);
   const keepCenter = useRef<{ x: number; y: number } | null>(null);
   const drag = useRef<{ x: number; y: number; left: number; top: number } | null>(null);
+  const swipe = useRef<{ x: number; y: number } | null>(null);
 
   const last = pages.length - 1;
   const page = pages[index];
@@ -95,7 +96,6 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
     (target: number) => {
       const next = Math.min(Math.max(target, 0), last);
       setIndex(next);
-      setZoom(1);
       stageRef.current?.scrollTo(0, 0);
       window.history.replaceState(null, "", withBase(hrefs[next]));
     },
@@ -218,8 +218,12 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [index, last, full, go, zoomIn, zoomOut, changeZoom, enterFull, exitFull]);
 
-  // --- перетягування збільшеної сторінки мишею ---
+  // --- перетягування збільшеної сторінки мишею; свайп пальцем гортає сторінки, коли масштаб 100% ---
   const onPointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch") {
+      swipe.current = zoom === 1 && event.isPrimary ? { x: event.clientX, y: event.clientY } : null;
+      return;
+    }
     if (zoom <= 1 || event.pointerType !== "mouse" || event.button !== 0) return;
     const element = event.currentTarget;
     drag.current = { x: event.clientX, y: event.clientY, left: element.scrollLeft, top: element.scrollTop };
@@ -231,8 +235,19 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
     event.currentTarget.scrollLeft = start.left - (event.clientX - start.x);
     event.currentTarget.scrollTop = start.top - (event.clientY - start.y);
   };
-  const onPointerEnd = () => {
+  const onPointerEnd = (event: PointerEvent<HTMLDivElement>) => {
     drag.current = null;
+    const start = swipe.current;
+    swipe.current = null;
+    if (!start || event.type !== "pointerup") return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(index + (dx < 0 ? 1 : -1));
+  };
+
+  // На телефоні дотик до сторінки відкриває її на весь екран.
+  const onStageClick = () => {
+    if (!full && zoom === 1 && window.matchMedia("(max-width: 47.99em)").matches) enterFull();
   };
 
   const canZoomIn = zoom < STEPS[STEPS.length - 1] - 0.001;
@@ -252,18 +267,18 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
           <div className="pv__nav">
             {index > 0 ? (
               <Link className="pv-btn" href={hrefs[index - 1]} rel="prev" prefetch={false} onClick={(event) => onLink(event, index - 1)}>
-                <ArrowLeft /> <span>Назад</span>
+                <ArrowLeft /> <span className="pv-btn__text">Назад</span>
               </Link>
             ) : (
-              <span className="pv-btn pv-btn--off" aria-disabled="true"><ArrowLeft /> <span>Назад</span></span>
+              <span className="pv-btn pv-btn--off" aria-disabled="true"><ArrowLeft /> <span className="pv-btn__text">Назад</span></span>
             )}
             <span className="pv__count" aria-live="polite"><span className="sr-only">Сторінка </span>{index + 1} з {pages.length}</span>
             {index < last ? (
               <Link className="pv-btn pv-btn--primary" href={hrefs[index + 1]} rel="next" prefetch={false} onClick={(event) => onLink(event, index + 1)}>
-                <span>Далі</span> <ArrowRight />
+                <span className="pv-btn__text">Далі</span> <ArrowRight />
               </Link>
             ) : (
-              <span className="pv-btn pv-btn--primary pv-btn--off" aria-disabled="true"><span>Далі</span> <ArrowRight /></span>
+              <span className="pv-btn pv-btn--primary pv-btn--off" aria-disabled="true"><span className="pv-btn__text">Далі</span> <ArrowRight /></span>
             )}
           </div>
           {jsReady && (
@@ -278,8 +293,8 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
                 <Plus />
               </button>
               {full ? (
-                <button type="button" ref={closeRef} className="pv-btn pv-btn--accent" onClick={exitFull} title="Закрити (Esc)">
-                  <Collapse /> <span>Закрити</span>
+                <button type="button" ref={closeRef} className="pv-btn pv-btn--accent" onClick={exitFull} aria-label="Закрити" title="Закрити (Esc)">
+                  <Collapse /> <span className="pv__long">Закрити</span>
                 </button>
               ) : (
                 <button type="button" ref={openRef} className="pv-btn pv-btn--accent" onClick={enterFull} aria-label="На весь екран" title="На весь екран (F)">
@@ -300,6 +315,7 @@ export default function PageViewer({ pages, hrefs, contents, initial, children }
             onPointerMove={onPointerMove}
             onPointerUp={onPointerEnd}
             onPointerCancel={onPointerEnd}
+            onClick={onStageClick}
             onDoubleClick={() => changeZoom(zoom > 1 ? 1 : 2)}
           >
             <div className="pv__sheet">
