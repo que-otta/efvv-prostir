@@ -65,7 +65,7 @@ const htmlFiles = files.filter((file) => extname(file) === ".html");
 const pages = new Map(); // шлях сторінки ("/komplekty/pedagogy/") → html
 for (const file of htmlFiles) {
   const path = rel(file);
-  if (path === "404.html") continue;
+  if (path === "404.html" || /^google[0-9a-f]+\.html$/.test(path)) continue;
   const url = path === "index.html" ? "/" : `/${path.replace(/index\.html$/, "")}`;
   pages.set(url, readFileSync(file, "utf8"));
 }
