@@ -8,8 +8,8 @@ import { terms } from "@/data/terms";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Як купити PDF-конспекти до ЄФВВ через Telegram",
-  description: "Як купити комплект PDF-конспектів до ЄФВВ: напиши в Telegram, оплати комплект переказом і отримай файли в особисті повідомлення. Без акаунтів і платіжних систем на сайті.",
+  title: "Як купити PDF-конспекти до ЄФВВ та ЄВВ через Telegram",
+  description: "Як купити комплект PDF-конспектів до ЄФВВ чи ЄВВ: напиши в Telegram, оплати комплект переказом і отримай файли в особисті повідомлення. Без акаунтів і платіжних систем на сайті.",
   path: "/yak-kupyty/",
 });
 

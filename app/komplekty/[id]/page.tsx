@@ -39,10 +39,10 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const files = `${stats.files} ${plural(stats.files, "PDF-файл", "PDF-файли", "PDF-файлів")}`;
   const sheets = stats.pages !== null ? `, ${stats.pages} ${plural(stats.pages, "сторінка", "сторінки", "сторінок")}` : "";
   return buildMetadata({
-    title: ready ? `${subject.title}: PDF-конспекти до ЄФВВ` : `${subject.title}: комплект готується`,
+    title: ready ? `${subject.title}: PDF-конспекти до ${subject.exam}` : `${subject.title}: комплект готується`,
     description: ready
-      ? `${files}${sheets} конспектів до ЄФВВ з предмета «${subject.title}» за розділами програми. ${price ? `Ціна — ${formatPrice(price)}, покупка` : "Покупка"} через Telegram.`
-      : `Комплект PDF-конспектів до ЄФВВ з предмета «${subject.title}» ще готується. ${subject.description}`,
+      ? `${files}${sheets} конспектів до ${subject.exam} з предмета «${subject.title}» за розділами програми. ${price ? `Ціна — ${formatPrice(price)}, покупка` : "Покупка"} через Telegram.`
+      : `Комплект PDF-конспектів до ${subject.exam} з предмета «${subject.title}» ще готується. ${subject.description}`,
     path: `/komplekty/${subject.id}/`,
     noindex: !ready,
     ogImage: subject.og,
@@ -67,7 +67,7 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
       {ready && price && (
         <JsonLd
           data={productJsonLd({
-            name: `Комплект PDF-конспектів до ЄФВВ: ${subject.title}`,
+            name: `Комплект PDF-конспектів до ${subject.exam}: ${subject.title}`,
             description: `${subject.overview} ${SCORE_NOTE}`,
             path,
             image: subject.preview.src,

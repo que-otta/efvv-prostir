@@ -11,9 +11,9 @@ export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://USERNAME.gi
 export const TELEGRAM_URL = "https://t.me/rftgyhokuya";
 
 export const SITE_NAME = "ЄФВВ Простір";
-export const SITE_TAGLINE = "Візуальні PDF-конспекти для підготовки до ЄФВВ";
+export const SITE_TAGLINE = "Візуальні PDF-конспекти для підготовки до ЄФВВ та ЄВВ";
 export const SITE_DESCRIPTION =
-  "Візуальні PDF-конспекти до іспиту ЄФВВ: комплекти за розділами офіційної програми, приклади сторінок і проста покупка через Telegram.";
+  "Візуальні PDF-конспекти до іспитів ЄФВВ та ЄВВ: комплекти за розділами офіційної програми, приклади сторінок і проста покупка через Telegram.";
 
 /**
  * Префікс шляху для проєктного GitHub Pages (`/назва-репозиторію`).

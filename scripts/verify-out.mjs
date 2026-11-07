@@ -10,8 +10,8 @@ import { pathToFileURL } from "node:url";
 
 const root = resolve(process.argv[2] ?? "out");
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
-// Запобіжник від випадково доданих важких файлів (ліміт GitHub Pages — 1 ГБ). 20 МБ, бо сторінки прикладів і банери лежать у нативній якості.
-const MAX_BYTES = 20 * 1024 * 1024;
+// Запобіжник від випадково доданих важких файлів (ліміт GitHub Pages — 1 ГБ). 30 МБ, бо сторінки прикладів і банери чотирьох комплектів лежать у нативній якості (≈20 МБ).
+const MAX_BYTES = 30 * 1024 * 1024;
 const BANNED = [/тренажер/i, /практик/i, /завантажити/i, /демо-пита/i, /chatgpt/i, /cloudflare/i, /openai/i, /прототип/i, /сундук/i, /версія 2/i];
 const TEXT_EXT = new Set([".html", ".txt", ".xml", ".json", ".css", ".js", ".svg"]);
 
@@ -41,8 +41,8 @@ const totalBytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
 if (totalBytes > MAX_BYTES) fail(`out/ важить ${(totalBytes / 1048576).toFixed(1)} МБ — більше за ${MAX_BYTES / 1048576} МБ`);
 for (const file of files) if (extname(file).toLowerCase() === ".pdf") fail(`PDF у збірці: ${rel(file)}`);
 
-// На сайті мають бути лише три приклади (по одному на предмет) — жодних сторінок чи уривків із повних файлів комплектів.
-const ALLOWED_MATERIALS = ["materials/management/", "materials/psychology/", "materials/pedagogy/demo/"];
+// На сайті мають бути лише приклади (по одному на предмет) — жодних сторінок чи уривків із повних файлів комплектів.
+const ALLOWED_MATERIALS = ["materials/management/", "materials/psychology/", "materials/methodology/", "materials/pedagogy/demo/"];
 for (const file of files) {
   const path = rel(file);
   if (path.startsWith("materials/") && !ALLOWED_MATERIALS.some((prefix) => path.startsWith(prefix))) fail(`зображення поза трьома прикладами: ${path}`);

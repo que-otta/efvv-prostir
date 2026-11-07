@@ -41,9 +41,9 @@ export default function HomePage() {
       <section className="hero dark">
         <div className="container hero__inner">
           <div className="hero__copy">
-            <p className="eyebrow">PDF-конспекти до ЄФВВ</p>
+            <p className="eyebrow">PDF-конспекти до ЄФВВ та ЄВВ</p>
             <h1>
-              Підготовка до ЄФВВ — <span className="neon-text">розділ за розділом</span> офіційної програми
+              Підготовка до ЄФВВ та ЄВВ — <span className="neon-text">розділ за розділом</span> офіційної програми
             </h1>
             <p className="lead">
               Візуальні PDF-конспекти, у яких кожен файл відповідає підрозділу (або кільком спорідненим підрозділам) програми
@@ -106,7 +106,7 @@ export default function HomePage() {
             </div>
             <div className="panel">
               <h3>Для кого</h3>
-              <p>Для тих, хто складає ЄФВВ і хоче пройти програму предмета послідовно, а не збирати конспекти з різних джерел.</p>
+              <p>Для тих, хто складає ЄФВВ або ЄВВ (вступ до аспірантури) і хоче пройти програму предмета послідовно, а не збирати конспекти з різних джерел.</p>
             </div>
             <div className="panel">
               <h3>Що отримуєш</h3>

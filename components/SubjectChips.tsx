@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { subjects } from "@/data/subjects";
 import Pic from "./Pic";
 
-/** Три предмети з неоновими іконками — швидкий вхід до сторінок комплектів. */
+/** Предмети з неоновими іконками — швидкий вхід до сторінок комплектів. */
 export default function SubjectChips() {
   return (
     <ul className="subject-chips" aria-label="Предмети">

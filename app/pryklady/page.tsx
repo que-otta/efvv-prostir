@@ -8,7 +8,7 @@ import { samplePath, samples } from "@/data/samples";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Приклади сторінок PDF-конспектів до ЄФВВ",
+  title: "Приклади сторінок PDF-конспектів до ЄФВВ та ЄВВ",
   description: "Погортай справжні сторінки з PDF-файлів комплектів: схеми, таблиці, карти розділів. Повні файли надсилаємо після покупки в Telegram.",
   path: "/pryklady/",
 });

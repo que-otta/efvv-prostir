@@ -7,8 +7,8 @@ import { buildMetadata } from "@/lib/seo";
 const names = subjects.map((subject) => `«${subject.title}»`).join(", ");
 
 export const metadata = buildMetadata({
-  title: "Комплекти PDF-конспектів до ЄФВВ за предметами",
-  description: `Комплекти PDF-конспектів до ЄФВВ: ${names}. Склад за розділами програми, кількість сторінок, ціна та приклад сторінок кожного комплекту.`,
+  title: "Комплекти PDF-конспектів до ЄФВВ та ЄВВ за предметами",
+  description: `Комплекти PDF-конспектів до ЄФВВ та ЄВВ: ${names}. Склад за розділами програми, кількість сторінок, ціна та приклад сторінок кожного комплекту.`,
   path: "/komplekty/",
 });
 

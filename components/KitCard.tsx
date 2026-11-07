@@ -38,7 +38,7 @@ export default function KitCard({ subject }: { subject: Subject }) {
         </p>
         {ready && (
           <p className="kit-card__edition">
-            <span className="pill">{subject.edition.label}</span>
+            <span className="pill">{subject.exam} · {subject.edition.label}</span>
             {subject.edition.freeUpdate && <span className="kit-card__free">оновлення безкоштовно</span>}
           </p>
         )}

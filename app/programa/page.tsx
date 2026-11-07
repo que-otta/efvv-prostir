@@ -4,8 +4,8 @@ import { subjects } from "@/data/subjects";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Програма ЄФВВ: розділи, ваги й рівні складності за предметами",
-  description: `Розділи й підрозділи офіційних програм предметних тестів ЄФВВ (${subjects.map((subject) => subject.title).join("; ")}): вага розділів, рівні завдань A–D та посилання на накази МОН.`,
+  title: "Програма ЄФВВ та ЄВВ: розділи, ваги й рівні складності за предметами",
+  description: `Розділи й підрозділи офіційних програм предметних тестів ЄФВВ та єдиного вступного випробування ЄВВ (${subjects.map((subject) => subject.title).join("; ")}): вага розділів, рівні завдань A–D та посилання на накази МОН.`,
   path: "/programa/",
 });
 

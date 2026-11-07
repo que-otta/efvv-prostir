@@ -43,7 +43,7 @@ function pagesFromSpecs(dir: string, specs: PageSpec[]): SamplePage[] {
 const contentsFromSpecs = (specs: PageSpec[]): SampleContentsItem[] => specs.map((spec, index) => ({ page: index + 1, title: spec.title }));
 
 /*
- * На сайті — лише по одному прикладу на предмет (вибрані сторінки з PDF «Приклад сторінок»).
+ * На сайті — лише по одному прикладу на предмет (вибрані сторінки з PDF «Приклад сторінок», які дав сам власник).
  * Сторінок із повних файлів комплектів, їхніх перших сторінок і карток-уривків на сайті бути не має.
  * Картинки — нативної якості з PDF (без зменшення), розміри в `size` збігаються з розмірами файлів.
  */
@@ -125,8 +125,34 @@ const managementSample: Sample = {
   contents: contentsFromSpecs(managementSpecs),
 };
 
+const methodologySpecs: PageSpec[] = [
+  { label: "Титул", title: "Титульна сторінка комплекту «Методологія наукових досліджень»", size: [1054, 1492] },
+  { label: "1.1", title: "1.1 Феномен науки: карта розділу", size: [1024, 1536] },
+  { label: "3.2.3.1", title: "3.2.3.1 Каталог: як організовано пошук документа", size: [1024, 1536] },
+  { label: "3.3.1.2", title: "3.3.1.2 Чотири принципи етики наукової діяльності", size: [1024, 1536] },
+  { label: "4.1.1.1", title: "4.1.1.1 ISSN, ISBN, DOI та ORCID", size: [1024, 1536] },
+  { label: "2.1.5.2", title: "2.1.5.2 Аксіологічний підхід: призма цінностей", size: [1024, 1536] },
+  { label: "2.2.1; 2.2.3", title: "2.2.1; 2.2.3 Джерела знання і межі пізнання", size: [1024, 1536] },
+  { label: "2.3.4.2", title: "2.3.4.2 Гіпотетико-дедуктивний метод", size: [1024, 1536] },
+  { label: "Завдання", title: "Завдання 1–4 до підрозділу 2.2: вибери одну найкращу відповідь", size: [1024, 1536] },
+  { label: "Відповіді", title: "Відповіді й пояснення до завдань 1–4 підрозділу 2.2", size: [1024, 1536] },
+  { label: "Шпаргалка 2.2", title: "Міні-шпаргалка до підрозділу 2.2: наукове пізнання", size: [1024, 1536] },
+];
+
+const methodologySample: Sample = {
+  slug: "methodology-pryklad-storinok",
+  subjectId: "methodology",
+  title: "Методологія наукових досліджень: приклад сторінок комплекту",
+  shortTitle: "11 сторінок прикладу · Методологія наукових досліджень",
+  description: "Титульна сторінка комплекту «Методологія наукових досліджень» і вибрані сторінки з різних файлів: карти розділів, схеми й таблиці, завдання, відповіді та міні-шпаргалка.",
+  lead: "Титульна сторінка комплекту та вибрані сторінки з різних файлів: карти розділів, схеми й таблиці, завдання з варіантами відповідей, розбір відповідей і міні-шпаргалка. Гортай кнопками «Далі» й «Назад» або стрілками на клавіатурі.",
+  cover: { src: "/img/cover-methodology.webp", width: 640, height: 906 },
+  pages: pagesFromSpecs("/materials/methodology", methodologySpecs),
+  contents: contentsFromSpecs(methodologySpecs),
+};
+
 /** Рівно по одному прикладу на предмет. Порядок — як у `subjects`. */
-export const samples: Sample[] = [pedagogySample, psychologySample, managementSample];
+export const samples: Sample[] = [pedagogySample, psychologySample, managementSample, methodologySample];
 
 export function getSample(slug: string): Sample | undefined {
   return samples.find((sample) => sample.slug === slug);
