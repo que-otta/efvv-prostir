@@ -1,9 +1,12 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { kitIsOneToOne, subjects } from "@/data/subjects";
+import { DESIGN } from "@/site.config";
 import { ArrowRight } from "./Icons";
 import LevelsBlock from "./LevelsBlock";
 import ProgramDonut from "./ProgramDonut";
 import StatusBadge from "./StatusBadge";
+import SubjectIcon from "./SubjectIcon";
 import Syllabus from "./Syllabus";
 
 function sectionsWord(count: number): string {
@@ -39,8 +42,9 @@ export default function ProgramBlock() {
 
       <div className="program-list">
         {subjects.map((subject, index) => (
-          <details className="program" key={subject.id} open={index === 0}>
+          <details className="program" key={subject.id} open={index === 0} style={{ "--c": subject.neon } as CSSProperties}>
             <summary>
+              {DESIGN === "graphite" && <SubjectIcon id={subject.id} className="v2-avatar v2-avatar--row" />}
               <span className="program__title">{subject.title}</span>
               <span className="program__meta">
                 {subject.syllabus.length} {sectionsWord(subject.syllabus.length)} <StatusBadge ready={subject.kit.ready} />

@@ -1,11 +1,14 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import BuyList from "@/components/BuyList";
+import BuyListGraphite from "@/components/BuyListGraphite";
 import EditionNote from "@/components/EditionNote";
 import { Check } from "@/components/Icons";
+import PageArt from "@/components/PageArt";
 import ScoreNote from "@/components/ScoreNote";
 import { REFUND_NOTE, subjects } from "@/data/subjects";
 import { terms } from "@/data/terms";
 import { buildMetadata } from "@/lib/seo";
+import { DESIGN } from "@/site.config";
 
 export const metadata = buildMetadata({
   title: "Як купити PDF-конспекти до ЄФВВ та ЄВВ через Telegram",
@@ -20,6 +23,7 @@ export default function HowToBuyPage() {
       <section className="page-head dark">
         <div className="container">
           <Breadcrumbs items={[{ href: "/", label: "Головна" }, { label: "Як купити" }]} />
+          <PageArt ids={["psychology", "pedagogy", "management"]} />
           <h1>Як купити комплект</h1>
           <p className="lead">
             Без акаунтів і платіжних систем: усе відбувається в Telegram. Обери комплект і напиши — текст повідомлення вже підготовлено.
@@ -29,8 +33,14 @@ export default function HowToBuyPage() {
 
       <section className="section dark" aria-labelledby="buy-list-title">
         <div className="container">
-          <h2 id="buy-list-title">Комплекти</h2>
-          <BuyList />
+          {DESIGN === "graphite" ? (
+            <BuyListGraphite withHeadings />
+          ) : (
+            <>
+              <h2 id="buy-list-title">Комплекти</h2>
+              <BuyList />
+            </>
+          )}
         </div>
       </section>
 

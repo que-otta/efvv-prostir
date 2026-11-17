@@ -42,7 +42,7 @@ export const faq: FaqItem[] = [
   },
   {
     question: "Чи гарантують матеріали успішне складання іспиту?",
-    answer: SCORE_NOTE,
+    answer: `Ні. ${SCORE_NOTE}`,
   },
   {
     question: "Чи відповідають усі файли комплекту прикладам на сайті?",

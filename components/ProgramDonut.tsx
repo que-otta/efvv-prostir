@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Subject } from "@/data/subjects";
 import { normalizedShares } from "@/lib/weights";
 import Pic from "./Pic";
@@ -19,7 +20,7 @@ export default function ProgramDonut({ subject }: { subject: Subject }) {
   }));
 
   return (
-    <figure className="donut">
+    <figure className="donut" style={{ "--c": subject.neon } as CSSProperties}>
       <div className="donut__chart">
         <svg viewBox="0 0 120 120" role="img" aria-label={`Розподіл програми «${subject.title}» за розділами`}>
           <circle cx="60" cy="60" r={RADIUS} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="15" />

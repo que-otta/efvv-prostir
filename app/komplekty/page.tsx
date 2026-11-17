@@ -1,8 +1,11 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import KitCard from "@/components/KitCard";
+import KitCardGraphite from "@/components/KitCardGraphite";
+import PageArt from "@/components/PageArt";
 import ScoreNote from "@/components/ScoreNote";
 import { subjects } from "@/data/subjects";
 import { buildMetadata } from "@/lib/seo";
+import { DESIGN } from "@/site.config";
 
 const names = subjects.map((subject) => `«${subject.title}»`).join(", ");
 
@@ -18,6 +21,7 @@ export default function KitsPage() {
       <section className="page-head dark">
         <div className="container">
           <Breadcrumbs items={[{ href: "/", label: "Головна" }, { label: "Комплекти" }]} />
+          <PageArt ids={["management", "psychology", "methodology"]} />
           <h1>Комплекти за предметами</h1>
           <p className="lead">
             По одному комплекту на предмет: {names}. Усередині — PDF-файли за підрозділами офіційної програми. Біля кожного комплекту
@@ -29,11 +33,21 @@ export default function KitsPage() {
       <section className="section dark" aria-label="Список комплектів">
         <div className="container">
           {subjects.some((subject) => subject.kit.ready) && <ScoreNote />}
-          <div className="grid grid--kits">
-            {subjects.map((subject) => (
-              <KitCard key={subject.id} subject={subject} />
-            ))}
-          </div>
+          {DESIGN === "graphite" ? (
+            <div className="v2">
+              <div className="v2-grid">
+                {subjects.map((subject) => (
+                  <KitCardGraphite key={subject.id} subject={subject} />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid--kits">
+              {subjects.map((subject) => (
+                <KitCard key={subject.id} subject={subject} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

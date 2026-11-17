@@ -1,15 +1,14 @@
 import { SCORE_NOTE } from "@/data/subjects";
 
-const KEY_PHRASE = "170 балів і більше";
+/** Ключові фрази застереження: «170+» і «не гарантуємо» підсвічуються в помаранчевому блоці. */
+const KEY_PHRASES = /(170\+|не гарантуємо)/;
 
-/** Застереження про рівень, на який розрахований зміст: помаранчевий блок із підкресленим «170 балів і більше». */
+/** Застереження про рівень, на який розрахований зміст: помаранчевий блок із підсвіченими «170+» і «не гарантуємо». */
 export default function ScoreNote({ compact = false }: { compact?: boolean }) {
-  const [before, after] = SCORE_NOTE.split(KEY_PHRASE);
+  const parts = SCORE_NOTE.split(KEY_PHRASES);
   return (
     <p className={compact ? "notice notice--warn notice--compact" : "notice notice--warn"}>
-      {before}
-      <mark>{KEY_PHRASE}</mark>
-      {after}
+      {parts.map((part, index) => (index % 2 === 1 ? <mark key={index}>{part}</mark> : part))}
     </p>
   );
 }

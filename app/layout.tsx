@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/site.config";
+import { DESIGN, SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from "@/site.config";
 import "./globals.css";
+import "./graphite.css";
+import "./geo.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -14,12 +16,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#0a0f24",
+  themeColor: DESIGN === "graphite" ? "#141517" : "#0a0f24",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="uk" data-scroll-behavior="smooth">
+    <html lang="uk" data-scroll-behavior="smooth" data-design={DESIGN}>
       <body>
         <a className="skip-link" href="#main">Перейти до змісту</a>
         <SiteHeader />

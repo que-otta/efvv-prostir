@@ -1,5 +1,6 @@
 import { telegramLink } from "@/lib/urls";
 import { formatPrice, kitMessage, type Subject } from "@/data/subjects";
+import { DESIGN } from "@/site.config";
 import BuySteps from "./BuySteps";
 import CopyMessage from "./CopyMessage";
 import { Telegram } from "./Icons";
@@ -32,12 +33,18 @@ export default function BuyBlock({ subject, only }: { subject: Subject; only?: "
               Напиши в Telegram — повідомимо, щойно комплект буде готовий. Платити зараз нічого не треба.
             </p>
           )}
-          <details className="buy__message">
-            <summary>Не відкривається Telegram?</summary>
-            <p>
-              Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
+          {DESIGN === "graphite" ? (
+            <p className="buy__copy">
+              Telegram не підставив текст? <CopyMessage text={message} /> і встав у чат.
             </p>
-          </details>
+          ) : (
+            <details className="buy__message">
+              <summary>Не відкривається Telegram?</summary>
+              <p>
+                Текст повідомлення: <q>{message}</q> <CopyMessage text={message} />
+              </p>
+            </details>
+          )}
         </>
       )}
     </div>

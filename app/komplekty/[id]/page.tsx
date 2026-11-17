@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import BuyBar from "@/components/BuyBar";
 import BuyBlock from "@/components/BuyBlock";
 import EditionNote from "@/components/EditionNote";
 import FileGallery from "@/components/FileGallery";
-import { Check } from "@/components/Icons";
+import { ArrowRight, Check } from "@/components/Icons";
 import KnowledgeList from "@/components/KnowledgeList";
 import { coverFor } from "@/components/KitCard";
 import LevelsOverview from "@/components/LevelsOverview";
@@ -14,6 +15,7 @@ import Pic from "@/components/Pic";
 import ProgramDonut from "@/components/ProgramDonut";
 import SampleStrip from "@/components/SampleStrip";
 import StatusBadge from "@/components/StatusBadge";
+import SubjectIcon from "@/components/SubjectIcon";
 import Syllabus from "@/components/Syllabus";
 import ScoreNote from "@/components/ScoreNote";
 import { formatPrice, getSubject, kitIsOneToOne, kitStats, levelsMeaning, REFUND_NOTE, SCORE_NOTE, subjects } from "@/data/subjects";
@@ -21,6 +23,8 @@ import { samples } from "@/data/samples";
 import { terms, updateTerm } from "@/data/terms";
 import { buildMetadata, JsonLd, productJsonLd } from "@/lib/seo";
 import { plural } from "@/lib/plural";
+import { sizeText } from "@/lib/sizeText";
+import { DESIGN } from "@/site.config";
 
 type Params = { id: string };
 
@@ -76,7 +80,7 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
         />
       )}
 
-      <section className="page-head dark">
+      <section className="page-head dark" data-subject={subject.id}>
         <div className="container">
           <Breadcrumbs items={[{ href: "/", label: "Головна" }, { href: "/komplekty/", label: "Комплекти" }, { label: subject.title }]} />
           <div className="kit-hero">
@@ -219,14 +223,34 @@ export default async function KitPage({ params }: { params: Promise<Params> }) {
       <section className={ready ? "section section--alt" : "section"} aria-labelledby="other-title">
         <div className="container">
           <h2 id="other-title">Інші комплекти</h2>
-          <ul className="link-list">
-            {others.map((item) => (
-              <li key={item.id}>
-                <Link href={`/komplekty/${item.id}/`}>{item.title}</Link>
-                <StatusBadge ready={item.kit.ready} />
-              </li>
-            ))}
-          </ul>
+          {DESIGN === "graphite" ? (
+            <ul className="v2-other">
+              {others.map((item) => {
+                const itemStats = kitStats(item);
+                return (
+                  <li key={item.id} style={{ "--c": item.neon } as CSSProperties}>
+                    <Link href={`/komplekty/${item.id}/`}>
+                      <SubjectIcon id={item.id} className="v2-avatar v2-avatar--row" />
+                      <span className="v2-other__text">
+                        <b>{item.title}</b>
+                        <span>{item.kit.ready ? [sizeText(itemStats.files, itemStats.pages), item.kit.price ? formatPrice(item.kit.price) : null].filter(Boolean).join(" · ") : "Комплект готується"}</span>
+                      </span>
+                      <ArrowRight />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="link-list">
+              {others.map((item) => (
+                <li key={item.id}>
+                  <Link href={`/komplekty/${item.id}/`}>{item.title}</Link>
+                  <StatusBadge ready={item.kit.ready} />
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
 
